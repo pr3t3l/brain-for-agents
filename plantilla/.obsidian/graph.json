@@ -1,0 +1,10 @@
+{
+  "showOrphans": true,
+  "colorGroups": [
+    {"query": "path:proyectos", "color": {"a": 1, "rgb": 15105570}},
+    {"query": "path:conocimiento/canales", "color": {"a": 1, "rgb": 3381759}},
+    {"query": "path:conocimiento/principios", "color": {"a": 1, "rgb": 8421504}},
+    {"query": "path:empresa", "color": {"a": 1, "rgb": 10181046}},
+    {"query": "path:fuentes", "color": {"a": 1, "rgb": 5025616}}
+  ]
+}

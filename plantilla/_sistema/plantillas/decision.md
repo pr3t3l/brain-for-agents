@@ -15,4 +15,4 @@ fuente:
 
 **Alternativas descartadas.** Qué no se eligió y por qué.
 
-**Qué cambia.** Qué páginas o trabajos afecta (con `[[enlaces]]`).
+**Qué cambia.** Qué páginas o trabajos afecta (con enlaces `[[...]]`).

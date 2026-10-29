@@ -37,10 +37,10 @@ Sigue el método "LLM Wiki" de Andrej Karpathy: fuentes crudas que no se editan,
 
 ## Lo que se cuida solo
 
-- **Reglas globales:** `_sistema/global.md` se copia a `~/.claude/CLAUDE.md` y `~/.codex/AGENTS.md` después de cada commit (`_sistema/scripts/sincronizar_global.py`). Edita solo `global.md`.
+- **Reglas globales:** `_sistema/global.md` se copia a `~/.claude/CLAUDE.md` y `~/.codex/AGENTS.md` después de cada commit (`_sistema/scripts/sync_global.py`). Edita solo `global.md`.
 - **Guardián (Claude Code):** una sesión abierta dentro de un proyecto (en su carpeta de código o en `cerebro/proyectos/<proyecto>`) solo puede escribir en `cerebro/proyectos/<proyecto>/` y en cualquier `entrada.md`. No cubre comandos de terminal ni a Codex: ahí vale la regla 5.
 - **Aviso (Claude Code):** si en una respuesta se cambiaron archivos de un proyecto y no se anotó nada, Claude recibe un recordatorio (como máximo uno cada 30 minutos por sesión).
-- **Pruebas:** `python -I _sistema/scripts/probar_guardianes.py`. **Salud:** `python -I _sistema/scripts/revisar_salud.py`.
+- **Pruebas:** `python -I _sistema/scripts/test_guards.py`. **Salud:** `python -I _sistema/scripts/health_check.py`.
 
 ## Prohibido
 

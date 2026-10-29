@@ -1,92 +1,101 @@
-# Cerebro para agentes
+# Brain for agents
 
-**Un solo lugar donde Claude Code, Codex y tú guardan todo lo que saben de tus proyectos, que se mantiene al día solo y que ninguna IA puede desordenar.**
+**One place where Claude Code, Codex and you keep everything you know about your projects. It keeps itself up to date, and no AI can mess it up.**
 
-[English version](README.en.md)
+[Versión en español](README.es.md)
 
-Si trabajas con varias IA en varios proyectos, ya conoces el problema: cada chat empieza de cero, le vuelves a explicar todo, las decisiones quedan enterradas en conversaciones que nadie vuelve a leer, y cada herramienta guarda su propia "memoria" en un lugar distinto.
+If you work with several AIs across several projects, you know the problem. Every chat starts from zero, so you explain everything again. Decisions get buried in conversations nobody rereads. And every tool keeps its own "memory" somewhere else.
 
-Este repo es la plantilla y la guía de cómo lo resolví para mi empresa, con varios productos en paralelo y agentes de Claude Code y Codex trabajando a la vez. Está pensado para que cualquiera lo copie en una tarde.
+This repo is the template, and the guide, for how I solved it in my company: several products in parallel, with Claude Code and Codex agents working at the same time. It is meant to be copied in an afternoon.
 
-## La idea de la que parte
+## Where it comes from
 
-Andrej Karpathy publicó [el patrón "LLM Wiki"](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f): en vez de que la IA busque en tus documentos cada vez, la IA **escribe y mantiene una wiki en Markdown**. Tiene tres capas (fuentes crudas que no se tocan, páginas que la IA mantiene y un archivo de reglas), tres rutinas (ingerir, consultar, revisar) y un índice y una bitácora. Obsidian sirve para mirarla. Lee el original: es corto y muy bueno.
+Andrej Karpathy published [the "LLM Wiki" pattern](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Instead of the AI searching your documents on every question, the AI **writes and maintains a Markdown wiki**.
 
-## Lo que este repo le agrega
+- **Three layers:** raw sources nobody edits, pages the AI maintains, and a rules file.
+- **Three routines:** ingest, query and lint.
+- **Two files:** an index and a log.
 
-El patrón de Karpathy está pensado para **una wiki, una persona y una IA**. Al usarlo con varios proyectos y varios agentes a la vez, aparecieron problemas que el patrón no resuelve. Esto es lo que les agregamos:
+Obsidian is the viewer. Read the original: it is short and very good.
 
-| Problema real | Lo que hace este cerebro |
+## What this repo adds
+
+Karpathy's pattern is designed for **one wiki, one person and one AI**. Using it with several projects and several agents at once surfaced problems the pattern does not solve. Here is what we added:
+
+| Real problem | What this brain does |
 |---|---|
-| Cada IA arranca sin saber nada | **Reglas globales** que Claude Code y Codex cargan en **todas** las sesiones, en cualquier carpeta, y que se copian solas desde el cerebro en cada commit |
-| Un chat de un proyecto escribe en otro proyecto | **Guardián:** un hook de Claude Code que bloquea cualquier escritura en la carpeta de otro proyecto |
-| "Anótalo al final de la sesión", pero las sesiones nunca se cierran | **Escribir en el momento**, y un **aviso** que le recuerda a la IA anotar cuando cambió archivos y no anotó nada |
-| Las decisiones de cada proyecto quedan sueltas | **Una nota por decisión**, en la carpeta de su proyecto, y **una tabla en vivo** (Obsidian Bases) que las junta todas |
-| Muchas páginas llamadas `index` o `marketing` en Obsidian | **Nombres únicos:** cada página lleva el nombre de su proyecto |
-| Nadie revisa que la wiki siga siendo verdad | **Revisión semanal** programada que contrasta con las fuentes, arregla y te deja máximo 5 preguntas |
-| Si se daña el computador, se pierde | **Respaldo en GitHub** con cada commit |
-| Lo que aprende un proyecto no le sirve a otro | **Aprendizajes por proyecto** que la revisión semanal junta por canal |
+| Every AI starts knowing nothing | **Global rules** that Claude Code and Codex load in **every** session, in any folder, copied automatically from the brain on every commit |
+| A chat for one project writes into another project | **Guardian:** a Claude Code hook that blocks any write into another project's folder |
+| "Update it when the session ends", but sessions never end | **Write in the moment**, plus a **reminder** that nudges the AI when it changed files and noted nothing |
+| Each project's decisions are scattered | **One note per decision**, in its project's folder, plus **one live table** (Obsidian Bases) that shows them all |
+| Many pages called `index` or `marketing` in Obsidian | **Unique names:** every page carries its project's name |
+| Nobody checks the wiki is still true | **A scheduled weekly review** that checks against the sources, fixes what it can and leaves you at most 5 questions |
+| If the computer dies, it is gone | **A GitHub backup** on every commit |
+| What one project learns does not help another | **Learnings per project**, gathered by channel in the weekly review |
 
-No es "mejor que Karpathy": es su idea, más la capa de operación que hace falta cuando hay varios proyectos y varios agentes trabajando a la vez.
+This is not "better than Karpathy". It is his idea, plus the operating layer you need when several projects and several agents work at once.
 
-## Cómo se ve
+## What it looks like
 
 ```text
-cerebro/                         ← una bóveda de Obsidian y un repo de git (privado)
-  AGENTS.md  CLAUDE.md           ← las reglas del cerebro
-  index.md   log.md              ← la portada y la bitácora
-  decisiones.base                ← tabla en vivo con todas las decisiones
-  _sistema/
-    global.md                    ← reglas que TODA IA carga en cualquier carpeta
-    config.json                  ← dónde viven tus proyectos
-    plantillas/  scripts/  revision-semanal.md
-  conocimiento/                  ← lo que sirve a todos: canales, principios con fuente
-  fuentes/                       ← documentos crudos, no se editan
-  proyectos/
-    tienda/                      ← un proyecto: tienda.md, tienda-estado.md, tienda-marketing.md,
-      decisiones/                  tienda-aprendizajes.md, tienda-fuentes.md, tienda-log.md
-  empresa/   entrada.md          ← lo que cruza proyectos y el buzón de avisos
-  revisiones/                    ← informes semanales
+brain/                           ← an Obsidian vault and a (private) git repo
+  AGENTS.md  CLAUDE.md           ← the brain's rules
+  index.md   log.md              ← front page and log
+  decisions.base                 ← live table of every decision
+  _system/
+    global.md                    ← rules EVERY AI loads, in any folder
+    config.json                  ← where your projects live, and the brain's language
+    templates/  scripts/  weekly-review.md
+  knowledge/                     ← what serves every project: channels, sourced principles
+  sources/                       ← raw documents, never edited
+  projects/
+    shop/                        ← one project: shop.md, shop-status.md, shop-marketing.md,
+      decisions/                   shop-learnings.md, shop-sources.md, shop-log.md
+  company/   inbox.md            ← what cuts across projects, and the notice inbox
+  reviews/                       ← weekly reports
 ```
 
-El código **no** vive aquí. Cada proyecto sigue en su propia carpeta y su propio repo; el cerebro guarda lo que sabemos, decidimos y aprendemos.
+Code does **not** live here. Each project stays in its own folder and its own repo; the brain holds what we know, decide and learn.
 
-## Instalarlo (unos 20 minutos)
+There are two templates with the same scripts: `template/` in English and `plantilla/` in Spanish. The language and the folder names are set in `_system/config.json`.
 
-Necesitas Python 3.11 o más nuevo, git, y Claude Code y/o Codex. Obsidian es opcional, solo para mirar.
+## Install it (about 20 minutes)
 
-1. **Copia la plantilla** a donde quieras tu cerebro, por ejemplo `Documentos/cerebro`:
+You need Python 3.11 or newer, git, and Claude Code and/or Codex. Obsidian is optional, just for viewing.
+
+1. **Copy the template** to wherever you want your brain, for example `Documents/brain`:
    ```bash
-   git clone https://github.com/pr3t3l/cerebro-para-agentes.git
-   cp -r cerebro-para-agentes/plantilla ~/Documentos/cerebro
+   git clone https://github.com/pr3t3l/brain-for-agents.git
+   cp -r brain-for-agents/template ~/Documents/brain
    ```
-2. **Edita `_sistema/config.json`:** en `carpetas_de_proyectos`, la carpeta donde viven tus proyectos (cada subcarpeta es un proyecto). Si tienes una carpeta de empresa, ponla en `carpetas_de_empresa`.
-3. **Edita `_sistema/global.md`:** quién eres, tus proyectos, la ruta del cerebro y tus prohibiciones. Es lo que toda IA va a leer siempre, así que mantenlo corto.
-4. **Prueba los guardianes:** `python -I _sistema/scripts/probar_guardianes.py` debe decir `TODO BIEN`.
-5. **Instala:** primero `python -I _sistema/scripts/instalar.py --dry-run` para ver qué va a cambiar, y luego sin `--dry-run`. Respalda cada archivo que toca (`*.antes-del-cerebro`).
-6. **Respaldo (recomendado):** crea un repo **privado** en GitHub y conéctalo (`git remote add origin ...`). Desde ahí cada commit se sube solo.
-7. **Revisión semanal (recomendado):** crea una tarea programada con el texto de `_sistema/revision-semanal.md`.
-8. Abre la carpeta como bóveda en Obsidian, borra el proyecto de ejemplo `proyectos/tienda` y crea el tuyo.
+2. **Edit `_system/config.json`:** in `project_folders`, put the folder where your projects live (each subfolder is one project). If you have a company folder, put it in `company_folders`.
+3. **Edit `_system/global.md`:** who you are, your projects, the brain's path and your rules. Every AI will always read it, so keep it short.
+4. **Test the guards:** `python -I _system/scripts/test_guards.py` must print `ALL GOOD`.
+5. **Install:** first `python -I _system/scripts/install.py --dry-run` to see what will change, then again without `--dry-run`. It backs up every file before changing it (`*.before-brain`).
+6. **Backup (recommended):** create a **private** GitHub repo and connect it (`git remote add origin ...`). From then on, every commit is pushed automatically.
+7. **Weekly review (recommended):** create a scheduled task with the text in `_system/weekly-review.md`.
+8. Open the folder as a vault in Obsidian, delete the example project `projects/shop` and create your own.
 
-Abre una sesión **nueva** de Claude Code o Codex: las reglas globales se cargan al iniciar.
+Open a **new** Claude Code or Codex session: global rules load when a session starts.
 
-## Cómo se usa en el día a día
+## How to use it day to day
 
-**Abre el chat donde está lo que vas a cambiar:**
+**Open the chat where the thing you will change lives:**
 
-| Qué vas a hacer | Abre el chat en |
+| What you will do | Open the chat in |
 |---|---|
-| Programar o arreglar un proyecto | La carpeta del código del proyecto |
-| Marketing o decisiones de **un** proyecto | `cerebro/proyectos/<proyecto>` |
-| Algo que cruza varios proyectos | La raíz del cerebro |
+| Write or fix a project's code | The project's code folder |
+| Marketing or decisions for **one** project | `brain/projects/<project>` |
+| Something across several projects | The root of the brain |
 
-Trabaja normal. Cuando decidas algo o llegue un número, la IA lo anota en ese momento. Si se le olvida, el aviso se lo recuerda. Cada semana, la revisión pone todo al día y te deja sus preguntas.
+Work as usual. When you decide something or numbers come in, the AI notes it right then. If it forgets, the reminder nudges it. Every week, the review brings everything up to date and leaves you its questions.
 
-## Más
+## More
 
-- [Cómo funciona por dentro](docs/como-funciona.md), con sus límites honestos.
-- [Preguntas frecuentes](docs/preguntas.md): todas las que me hice armándolo.
+- [How it works inside](docs/how-it-works.md), including its honest limits.
+- [FAQ](docs/faq.md): every question I asked myself while building it.
+- In Spanish: [README](README.es.md), [cómo funciona](docs/es/como-funciona.md), [preguntas frecuentes](docs/es/preguntas.md).
 
-## Créditos y licencia
+## Credits and license
 
-Idea base: [LLM Wiki de Andrej Karpathy](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Armado por Alfredo Pretel (Pretel Ventures) con Claude Code. Licencia MIT: úsalo, cópialo y mejóralo.
+Base idea: [Andrej Karpathy's LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f). Built by Alfredo Pretel (Pretel Ventures) with Claude Code. MIT license: use it, copy it and improve it.

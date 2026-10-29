@@ -1,7 +1,7 @@
-"""Claude Code Stop hook: remind a project session to write to the cerebro when it changed files but noted nothing.
+"""Claude Code Stop hook: remind a project session to write to the brain when it changed files but noted nothing.
 
-Fires only in sessions opened inside a project, only when this turn edited files outside the cerebro with Claude's
-file tools and wrote nothing to cerebro/proyectos/<project>, and at most once every 30 minutes per session.
+Fires only in sessions opened inside a project, only when this turn edited files outside the brain with Claude's
+file tools and wrote nothing to the project's brain folder, and at most once every 30 minutes per session.
 It reads the conversation file Claude Code keeps on disk; it does not call any model.
 """
 import json
@@ -11,7 +11,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # run with python -I, so add this folder by hand
-from rutas import allowed_brain_prefix, in_brain, norm, session_scope  # noqa: E402
+from paths import BRAIN, allowed_brain_prefix, in_brain, msg, norm, session_scope  # noqa: E402
 
 EDIT_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
 QUIET_SECONDS = 30 * 60
@@ -20,7 +20,7 @@ data = json.loads(sys.stdin.buffer.read().decode("utf-8"))  # Windows consoles a
 if data.get("stop_hook_active"):
     sys.exit(0)
 kind, project = session_scope(data.get("cwd"))
-if kind != "proyecto":
+if kind != "project":
     sys.exit(0)
 
 
@@ -62,14 +62,9 @@ brain_edits = [p for p in touched if p.startswith(prefix + "/")]
 if not project_edits or brain_edits:
     sys.exit(0)
 
-stamp = Path(tempfile.gettempdir()) / f"cerebro-aviso-{data.get('session_id', 'x')}"
+stamp = Path(tempfile.gettempdir()) / f"brain-reminder-{data.get('session_id', 'x')}"
 if stamp.exists() and time.time() - stamp.stat().st_mtime < QUIET_SECONDS:
     sys.exit(0)
 stamp.touch()
 
-print(json.dumps({"decision": "block", "reason": (
-    f"Recordatorio del cerebro: en esta respuesta cambiaste archivos de {project} y no anotaste nada en "
-    f"`cerebro/proyectos/{project}/`. Si hubo una decisión, una tarea terminada o números nuevos, "
-    f"anótalo ahora en `{project}-log.md` y en la página que corresponda, siguiendo `cerebro/AGENTS.md`. "
-    "Si no hubo nada de eso, termina sin hacer nada más y sin mencionarlo."
-)}))
+print(json.dumps({"decision": "block", "reason": msg("reminder", project=project, folder=prefix[len(BRAIN) + 1:])}))

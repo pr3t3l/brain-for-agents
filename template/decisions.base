@@ -1,0 +1,16 @@
+filters:
+  and:
+    - file.inFolder("projects")
+    - type == "decision"
+views:
+  - type: table
+    name: All decisions
+    groupBy:
+      property: project
+      direction: ASC
+    order:
+      - file.name
+      - project
+      - date
+      - status
+      - source

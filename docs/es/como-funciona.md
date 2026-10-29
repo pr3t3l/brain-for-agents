@@ -39,7 +39,7 @@ Cuando bloquea, Claude recibe la razón y la propuesta: "deja una línea en el `
 
 ## 5. El aviso
 
-Es un hook `Stop` de Claude Code (`_sistema/scripts/aviso.py`), que corre al terminar cada respuesta. Claude Code guarda cada conversación como un archivo en tu disco y le pasa al hook su ubicación. El script, **sin usar ningún modelo**:
+Es un hook `Stop` de Claude Code (`_sistema/scripts/reminder.py`), que corre al terminar cada respuesta. Claude Code guarda cada conversación como un archivo en tu disco y le pasa al hook su ubicación. El script, **sin usar ningún modelo**:
 
 1. busca tu último mensaje;
 2. lista los archivos que Claude editó desde ahí;
@@ -64,7 +64,11 @@ Es una tarea programada de Claude (instrucciones en `_sistema/revision-semanal.m
 - deja un informe con máximo 5 preguntas para ti;
 - guarda y sube todo.
 
-## 8. ¿Cuánto cuesta en tokens?
+## 8. Idioma y nombres de carpetas
+
+`_sistema/config.json` define el idioma (`language`: `es` o `en`) y los nombres de las carpetas (`layout`). Los scripts son idénticos en la plantilla en inglés (`template/`) y en la de español (`plantilla/`); solo cambia la configuración. Así puedes renombrar carpetas sin tocar código.
+
+## 9. ¿Cuánto cuesta en tokens?
 
 - **Los scripts no gastan tokens:** son Python en tu computador.
 - **El guardián**, cuando bloquea, le pasa a Claude un mensaje de unas 50 palabras.
@@ -72,7 +76,7 @@ Es una tarea programada de Claude (instrucciones en `_sistema/revision-semanal.m
 - **Las reglas globales** (unos 500 tokens) se cargan al iniciar cada sesión.
 - **Lo que más gasta es la revisión semanal**, que es una sesión completa una vez por semana. Y, claro, cuando una IA lee el cerebro para trabajar, que es justamente el propósito.
 
-## 9. Límites honestos
+## 10. Límites honestos
 
 - **El guardián y el aviso son de Claude Code.** Codex no tiene un equivalente que haya podido confirmar: ahí la protección es la regla escrita, más `writable_roots` para que pueda escribir en el cerebro.
 - **El guardián solo vigila las herramientas de edición de Claude**, no los comandos de terminal.

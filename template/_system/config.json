@@ -1,0 +1,15 @@
+{
+  "language": "en",
+  "project_folders": [
+    "C:/Users/YOUR-USER/Projects"
+  ],
+  "company_folders": [],
+  "layout": {
+    "projects": "projects",
+    "company": "company",
+    "inbox": "inbox.md",
+    "decisions": "decisions",
+    "decision_tag": "type: decision",
+    "unconfirmed": "to confirm"
+  }
+}

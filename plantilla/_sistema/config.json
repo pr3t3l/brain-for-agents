@@ -1,6 +1,15 @@
 {
-  "carpetas_de_proyectos": [
+  "language": "es",
+  "project_folders": [
     "C:/Users/TU-USUARIO/Proyectos"
   ],
-  "carpetas_de_empresa": []
+  "company_folders": [],
+  "layout": {
+    "projects": "proyectos",
+    "company": "empresa",
+    "inbox": "entrada.md",
+    "decisions": "decisiones",
+    "decision_tag": "tipo: decision",
+    "unconfirmed": "por confirmar"
+  }
 }

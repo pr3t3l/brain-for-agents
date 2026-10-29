@@ -32,6 +32,7 @@ Karpathy's pattern is designed for **one wiki, one person and one AI**. Using it
 | Nobody checks the wiki is still true | **A scheduled weekly review** that checks against the sources, fixes what it can and leaves you at most 5 questions |
 | If the computer dies, it is gone | **A GitHub backup** on every commit |
 | What one project learns does not help another | **Learnings per project**, gathered by channel in the weekly review |
+| The AI greps around the code to find what breaks | **Nested code maps:** each repo keeps a [Graphify](https://github.com/safishamsi/graphify) code graph, and the global rules tell every agent to use it first and keep it fresh |
 
 This is not "better than Karpathy". It is his idea, plus the operating layer you need when several projects and several agents work at once.
 
@@ -57,6 +58,20 @@ brain/                           ← an Obsidian vault and a (private) git repo
 
 Code does **not** live here. Each project stays in its own folder and its own repo; the brain holds what we know, decide and learn.
 
+## Nested with Graphify code maps
+
+The brain answers "what do we know and what did we decide?". A code map answers "where in the code does this happen, and what breaks if I change it?". Two memories, each in its own place:
+
+```text
+global rules  ← every session, any folder: "the brain is here; if the repo has a code map, use it first"
+ ├── brain/               knowledge and decisions; each project's page lists its repo and its map
+ └── Projects/shop/       the project's repo
+       AGENTS.md          how to query this map and when to rebuild it
+       graphify-out/      the code graph (tree-sitter, no tokens), rebuilt, never edited by hand
+```
+
+We don't run Graphify on the brain: the brain's `[[links]]` already make its graph, and Graphify reads documents with a model (tokens). Setup, tips and a more advanced four-map setup: [docs/code-maps.md](docs/code-maps.md).
+
 There are two templates with the same scripts: `template/` in English and `plantilla/` in Spanish. The language and the folder names are set in `_system/config.json`.
 
 ## Install it (about 20 minutes)
@@ -75,6 +90,7 @@ You need Python 3.11 or newer, git, and Claude Code and/or Codex. Obsidian is op
 6. **Backup (recommended):** create a **private** GitHub repo and connect it (`git remote add origin ...`). From then on, every commit is pushed automatically.
 7. **Weekly review (recommended):** create a scheduled task with the text in `_system/weekly-review.md`.
 8. Open the folder as a vault in Obsidian, delete the example project `projects/shop` and create your own.
+9. **Code maps (recommended):** give each project repo a Graphify code graph, as in [docs/code-maps.md](docs/code-maps.md).
 
 Open a **new** Claude Code or Codex session: global rules load when a session starts.
 
@@ -93,8 +109,9 @@ Work as usual. When you decide something or numbers come in, the AI notes it rig
 ## More
 
 - [How it works inside](docs/how-it-works.md), including its honest limits.
+- [The brain and the code maps](docs/code-maps.md): how it nests with Graphify.
 - [FAQ](docs/faq.md): every question I asked myself while building it.
-- In Spanish: [README](README.es.md), [cómo funciona](docs/es/como-funciona.md), [preguntas frecuentes](docs/es/preguntas.md).
+- In Spanish: [README](README.es.md), [cómo funciona](docs/es/como-funciona.md), [mapas de código](docs/es/mapas-de-codigo.md), [preguntas frecuentes](docs/es/preguntas.md).
 
 ## Credits and license
 

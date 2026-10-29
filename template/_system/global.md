@@ -9,6 +9,7 @@ I am {{your name}}. My projects: {{project 1 (what it is)}}, {{project 2 (what i
 - **The brain:** `{{full path of the brain}}`. Start with `index.md` and, if you are working on a project, with `projects/<project>/<project>.md` and `<project>-status.md`.
 - **Shared knowledge:** `knowledge/knowledge.md`.
 - **Each project's code** lives in `{{projects folder}}`. The brain holds no code.
+- **Code maps:** if the repo you work in has `MAPS.md` or a `graphify-out/` folder, query it before searching by hand ("which file does this, and what breaks if I change it?") and follow its `AGENTS.md` rules to keep it fresh. If the repo says nothing, run `graphify update .` after big code changes (code only, no tokens).
 
 ## How to work with me
 - {{how you want to be talked to; for example: plainly, no jargon}}.

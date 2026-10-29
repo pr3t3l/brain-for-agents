@@ -18,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # run with python -I, so add this folder by hand
 from paths import CFG, SYSTEM  # noqa: E402
-from sync_global import global_copy  # noqa: E402
+from sync_global import global_block, merged  # noqa: E402
 
 DRY = "--dry-run" in sys.argv
 ES = CFG["language"] == "es"
@@ -80,10 +80,10 @@ write(hook, "\n".join([
 if not DRY:
     hook.chmod(0o755)
 
-# 2. global rules for both tools (backup first, then sync_global.py owns them)
+# 2. global rules for both tools: backup first, then our block goes on top and anything already there is kept
 for target in [HOME / ".claude" / "CLAUDE.md", HOME / ".codex" / "AGENTS.md"]:
     if target.parent.exists():
-        write(target, global_copy())
+        write(target, merged(target.read_text(encoding="utf-8") if target.exists() else "", global_block()))
     else:
         say(t(f"skipping {target}: that tool is not installed", f"salto {target}: esa herramienta no está instalada"))
 

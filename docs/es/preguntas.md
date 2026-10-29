@@ -13,6 +13,12 @@ Para mirar. El cerebro es una carpeta con archivos Markdown; Obsidian la muestra
 **¿Qué es Graphify? ¿Es una app como Obsidian?**
 No. Es un programa de línea de comandos que convierte una carpeta de código en un mapa de conocimiento (archivos HTML que abres en el navegador, más un reporte). Sirve para el **código** ("¿qué archivo hace esto y qué se rompe si lo cambio?"). El cerebro sirve para **lo que sabemos y decidimos**. Se complementan.
 
+**¿Cómo encajan el cerebro y Graphify?**
+Están anidados. Las reglas globales (que se cargan en todas las sesiones) dicen dónde está el cerebro y le indican al agente: "si este repo tiene `MAPS.md` o `graphify-out/`, consúltalo antes de buscar a mano y mantenlo al día". Cada repo guarda su propio mapa de código, y la página de cada proyecto en el cerebro dice dónde está. No le pasamos el cerebro a Graphify: sus enlaces `[[...]]` ya forman el mapa, y Graphify lee documentos con un modelo (gasta tokens). Detalles: [mapas-de-codigo.md](mapas-de-codigo.md).
+
+**¿El instalador de Graphify choca con el archivo de reglas globales?**
+No. Graphify agrega una línea a `~/.claude/CLAUDE.md`, y la sincronización del cerebro solo reemplaza su propio bloque en ese archivo (entre las marcas `brain:global-copy`) y conserva todo lo demás. La prueba del instalador comprueba exactamente eso.
+
 ## Sobre la estructura
 
 **¿Un cerebro global para toda la empresa o uno por proyecto?**

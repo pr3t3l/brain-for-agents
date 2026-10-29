@@ -31,7 +31,6 @@ MESSAGES = {
                      "note it now in `{project}-log.md` and in the page it belongs to, following the brain's `AGENTS.md`. "
                      "If there was none of that, finish without doing anything else and without mentioning it."),
         "global_header": "Automatic copy of the brain's global.md. Do not edit it here: edit that file and commit in the brain.",
-        "not_mine": "left alone: {target} has your own content. Run install.py, which backs it up before replacing it.",
         "updated": "updated: {target}",
     },
     "es": {
@@ -43,7 +42,6 @@ MESSAGES = {
                      "anótalo ahora en `{project}-log.md` y en la página que corresponda, siguiendo `AGENTS.md` del cerebro. "
                      "Si no hubo nada de eso, termina sin hacer nada más y sin mencionarlo."),
         "global_header": "Copia automática del global.md del cerebro. No la edites aquí: edita ese archivo y haz commit en el cerebro.",
-        "not_mine": "no lo toco: {target} tiene contenido tuyo. Corre install.py, que lo respalda antes de reemplazarlo.",
         "updated": "actualizado: {target}",
     },
 }

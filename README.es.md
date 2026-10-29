@@ -26,6 +26,7 @@ El patrón de Karpathy está pensado para **una wiki, una persona y una IA**. Al
 | Nadie revisa que la wiki siga siendo verdad | **Revisión semanal** programada que contrasta con las fuentes, arregla y te deja máximo 5 preguntas |
 | Si se daña el computador, se pierde | **Respaldo en GitHub** con cada commit |
 | Lo que aprende un proyecto no le sirve a otro | **Aprendizajes por proyecto** que la revisión semanal junta por canal |
+| La IA busca a ciegas en el código qué se rompe | **Mapas de código anidados:** cada repo tiene su mapa de [Graphify](https://github.com/safishamsi/graphify), y las reglas globales le dicen a todo agente que lo use primero y lo mantenga al día |
 
 No es "mejor que Karpathy": es su idea, más la capa de operación que hace falta cuando hay varios proyectos y varios agentes trabajando a la vez.
 
@@ -38,7 +39,7 @@ cerebro/                         ← una bóveda de Obsidian y un repo de git (p
   decisiones.base                ← tabla en vivo con todas las decisiones
   _sistema/
     global.md                    ← reglas que TODA IA carga en cualquier carpeta
-    config.json                  ← dónde viven tus proyectos
+    config.json                  ← dónde viven tus proyectos y el idioma del cerebro
     plantillas/  scripts/  revision-semanal.md
   conocimiento/                  ← lo que sirve a todos: canales, principios con fuente
   fuentes/                       ← documentos crudos, no se editan
@@ -51,6 +52,20 @@ cerebro/                         ← una bóveda de Obsidian y un repo de git (p
 
 El código **no** vive aquí. Cada proyecto sigue en su propia carpeta y su propio repo; el cerebro guarda lo que sabemos, decidimos y aprendemos.
 
+## Anidado con los mapas de código de Graphify
+
+El cerebro responde "¿qué sabemos y qué decidimos?". Un mapa de código responde "¿en qué parte del código pasa esto, y qué se rompe si lo cambio?". Son dos memorias, cada una en su lugar:
+
+```text
+reglas globales  ← todas las sesiones, cualquier carpeta: "el cerebro está aquí; si el repo tiene mapa, úsalo primero"
+ ├── cerebro/              conocimiento y decisiones; la página de cada proyecto dice dónde está su repo y su mapa
+ └── Proyectos/tienda/     el repo del proyecto
+       AGENTS.md           cómo consultar su mapa y cuándo reconstruirlo
+       graphify-out/       el mapa del código (tree-sitter, sin tokens): se reconstruye, nunca se edita a mano
+```
+
+No corremos Graphify sobre el cerebro: los enlaces `[[...]]` del cerebro ya forman su mapa, y Graphify lee documentos con un modelo (gasta tokens). Cómo montarlo, consejos y una versión avanzada con cuatro mapas: [docs/es/mapas-de-codigo.md](docs/es/mapas-de-codigo.md).
+
 ## Instalarlo (unos 20 minutos)
 
 Necesitas Python 3.11 o más nuevo, git, y Claude Code y/o Codex. Obsidian es opcional, solo para mirar.
@@ -60,13 +75,14 @@ Necesitas Python 3.11 o más nuevo, git, y Claude Code y/o Codex. Obsidian es op
    git clone https://github.com/pr3t3l/brain-for-agents.git
    cp -r brain-for-agents/plantilla ~/Documentos/cerebro
    ```
-2. **Edita `_sistema/config.json`:** en `carpetas_de_proyectos`, la carpeta donde viven tus proyectos (cada subcarpeta es un proyecto). Si tienes una carpeta de empresa, ponla en `carpetas_de_empresa`.
+2. **Edita `_sistema/config.json`:** en `project_folders`, la carpeta donde viven tus proyectos (cada subcarpeta es un proyecto). Si tienes una carpeta de empresa, ponla en `company_folders`.
 3. **Edita `_sistema/global.md`:** quién eres, tus proyectos, la ruta del cerebro y tus prohibiciones. Es lo que toda IA va a leer siempre, así que mantenlo corto.
 4. **Prueba los guardianes:** `python -I _sistema/scripts/test_guards.py` debe decir `ALL GOOD`.
 5. **Instala:** primero `python -I _sistema/scripts/install.py --dry-run` para ver qué va a cambiar, y luego sin `--dry-run`. Respalda cada archivo que toca (`*.before-brain`).
 6. **Respaldo (recomendado):** crea un repo **privado** en GitHub y conéctalo (`git remote add origin ...`). Desde ahí cada commit se sube solo.
 7. **Revisión semanal (recomendado):** crea una tarea programada con el texto de `_sistema/revision-semanal.md`.
 8. Abre la carpeta como bóveda en Obsidian, borra el proyecto de ejemplo `proyectos/tienda` y crea el tuyo.
+9. **Mapas de código (recomendado):** dale a cada repo de proyecto su mapa de Graphify, como explica [docs/es/mapas-de-codigo.md](docs/es/mapas-de-codigo.md).
 
 Abre una sesión **nueva** de Claude Code o Codex: las reglas globales se cargan al iniciar.
 
@@ -85,6 +101,7 @@ Trabaja normal. Cuando decidas algo o llegue un número, la IA lo anota en ese m
 ## Más
 
 - [Cómo funciona por dentro](docs/es/como-funciona.md), con sus límites honestos.
+- [El cerebro y los mapas de código](docs/es/mapas-de-codigo.md): cómo se anida con Graphify.
 - [Preguntas frecuentes](docs/es/preguntas.md): todas las que me hice armándolo.
 
 ## Créditos y licencia

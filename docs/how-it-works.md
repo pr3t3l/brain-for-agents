@@ -22,7 +22,7 @@ We checked this with tests, not only by reading the docs:
 - **Claude Code** reads the `CLAUDE.md` files in the folder where you open the session **and in every folder above it, up to the root of the drive**, even across separate repos. It also always reads `~/.claude/CLAUDE.md`, wherever you open it.
 - **Codex** reads `~/.codex/AGENTS.md` and then the `AGENTS.md` files from the **repo root** down to your folder. **It does not look above the repo root.** We tested it with two folders: a "company" folder with one secret word, and a "project" repo inside it with another. Codex only saw the project's word.
 
-That is why the global rules go in the two personal files (`~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`), which always load. To avoid keeping two copies by hand, the source of truth is the brain's `_system/global.md`, and a git `post-commit` hook copies it to both places every time you save the brain.
+That is why the global rules go in the two personal files (`~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`), which always load. To avoid keeping two copies by hand, the source of truth is the brain's `_system/global.md`, and a git `post-commit` hook copies it to both places every time you save the brain. It only replaces the brain's own block in those files (between `brain:global-copy` markers), so lines other tools add, like Graphify's, stay.
 
 Inside the brain, `CLAUDE.md` contains only `@AGENTS.md`, so Claude and Codex read the same rules file.
 

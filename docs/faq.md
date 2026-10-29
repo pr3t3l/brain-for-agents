@@ -13,6 +13,12 @@ Viewing. The brain is a folder of Markdown files; Obsidian shows it with links, 
 **What is Graphify? Is it an app like Obsidian?**
 No. It is a command-line program that turns a code folder into a knowledge graph (HTML files you open in a browser, plus a report). It is for **code** ("which file does this, and what breaks if I change it?"). The brain is for **what we know and decide**. They complement each other.
 
+**How do the brain and Graphify fit together?**
+They are nested. The global rules (loaded in every session) say where the brain is and tell the agent: "if this repo has `MAPS.md` or `graphify-out/`, query it before searching by hand and keep it fresh". Each repo keeps its own code graph; each project's page in the brain lists it. We don't point Graphify at the brain: its `[[links]]` already make the graph, and Graphify reads documents with a model (tokens). Details: [code-maps.md](code-maps.md).
+
+**Does Graphify's installer conflict with the global rules file?**
+No. Graphify adds a line to `~/.claude/CLAUDE.md`. The brain's sync only replaces its own block in that file (between `brain:global-copy` markers) and keeps everything else. The installer test checks exactly that.
+
 ## About the structure
 
 **One brain for the whole company, or one per project?**

@@ -9,6 +9,7 @@ Soy {{tu nombre}}. Mis proyectos: {{proyecto 1 (qué es)}}, {{proyecto 2 (qué e
 - **El cerebro:** `{{ruta completa del cerebro}}`. Empieza por `index.md` y, si trabajas en un proyecto, por `proyectos/<proyecto>/<proyecto>.md` y `<proyecto>-estado.md`.
 - **Conocimiento compartido:** `conocimiento/conocimiento.md`.
 - **El código** de cada proyecto vive en `{{carpeta de proyectos}}`. El cerebro no tiene código.
+- **Mapas del código:** si el repo donde trabajas tiene `MAPS.md` o una carpeta `graphify-out/`, consúltalos antes de buscar a mano ("¿qué archivo hace esto y qué se rompe si lo cambio?") y sigue las reglas de su `AGENTS.md` para mantenerlos al día. Si el repo no dice nada, después de cambios grandes de código corre `graphify update .` (solo código, no gasta tokens).
 
 ## Cómo trabajar conmigo
 - {{cómo quieres que te hablen; por ejemplo: claro, sin jerga}}.

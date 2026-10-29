@@ -37,7 +37,7 @@ It follows Andrej Karpathy's "LLM Wiki" pattern: raw sources nobody edits, pages
 
 ## What takes care of itself
 
-- **Global rules:** `_system/global.md` is copied to `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` after every commit (`_system/scripts/sync_global.py`). Edit only `global.md`.
+- **Global rules:** `_system/global.md` is copied to `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md` after every commit (`_system/scripts/sync_global.py`), replacing only its own block in those files. Edit only `global.md`.
 - **Guardian (Claude Code):** a session opened inside a project (in its code folder or in `brain/projects/<project>`) can only write to `brain/projects/<project>/` and to any `inbox.md`. It does not cover shell commands or Codex: there, rule 5 applies.
 - **Reminder (Claude Code):** if a reply changed a project's files and noted nothing, Claude gets a reminder (at most once every 30 minutes per session).
 - **Tests:** `python -I _system/scripts/test_guards.py`. **Health:** `python -I _system/scripts/health_check.py`.

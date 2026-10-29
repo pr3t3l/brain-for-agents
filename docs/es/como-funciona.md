@@ -22,7 +22,7 @@ Esto lo comprobé con pruebas, no solo leyendo la documentación:
 - **Claude Code** lee los `CLAUDE.md` de la carpeta donde abres la sesión **y de todas las carpetas de arriba, hasta la raíz del disco**, aunque haya repos en medio. Además lee siempre `~/.claude/CLAUDE.md`, abras donde abras.
 - **Codex** lee `~/.codex/AGENTS.md` y luego los `AGENTS.md` desde la **raíz del repo** hasta tu carpeta. **No sube más allá de la raíz del repo.** Lo probé con dos carpetas: una "empresa" con una palabra secreta y un repo "proyecto" adentro con otra. Codex solo vio la del proyecto.
 
-Por eso las reglas globales van en los dos archivos personales (`~/.claude/CLAUDE.md` y `~/.codex/AGENTS.md`), que se cargan siempre. Para no mantener dos copias a mano, la verdad vive en `cerebro/_sistema/global.md` y un hook de git (`post-commit`) la copia a los dos lugares cada vez que guardas el cerebro.
+Por eso las reglas globales van en los dos archivos personales (`~/.claude/CLAUDE.md` y `~/.codex/AGENTS.md`), que se cargan siempre. Para no mantener dos copias a mano, la verdad vive en `cerebro/_sistema/global.md` y un hook de git (`post-commit`) la copia a los dos lugares cada vez que guardas el cerebro. Solo reemplaza el bloque propio del cerebro en esos archivos (entre las marcas `brain:global-copy`), así que las líneas que agregan otras herramientas, como Graphify, se quedan.
 
 Dentro del cerebro, `CLAUDE.md` contiene solo `@AGENTS.md`: así Claude y Codex leen el mismo archivo de reglas.
 

@@ -64,11 +64,17 @@ def check_template(name, system):
     checks["original backup survives a second install"] = (home / ".claude" / "CLAUDE.md.before-brain").read_text(encoding="utf-8") == "my old rules\n"
     checks["no duplicate hooks"] = len(s2["hooks"]["PreToolUse"]) == 1 and len(s2["hooks"]["Stop"]) == 1
     checks["no duplicate Codex table"] = (home / ".codex" / "config.toml").read_text(encoding="utf-8").count("[sandbox_workspace_write]") == 1
+    checks["old CLAUDE.md content kept below the block"] = "my old rules" in (home / ".claude" / "CLAUDE.md").read_text(encoding="utf-8")
+    claude_md = home / ".claude" / "CLAUDE.md"
+    graphify_line = chr(10) + "- graphify: use /graphify for the knowledge graph" + chr(10)  # what Graphify's installer adds
+    claude_md.write_text(claude_md.read_text(encoding="utf-8") + graphify_line, encoding="utf-8")
     g = brain / system / "global.md"
     g.write_text(g.read_text(encoding="utf-8") + "\n- new test rule\n", encoding="utf-8")
     run(["git", "-C", str(brain), "add", "-A"])
     run(["git", "-C", str(brain), "-c", "user.name=test", "-c", "user.email=test@example.com", "commit", "-q", "-m", "test"])
     checks["commit syncs the global rules"] = "new test rule" in (home / ".codex" / "AGENTS.md").read_text(encoding="utf-8")
+    after = claude_md.read_text(encoding="utf-8")
+    checks["sync keeps lines other tools add (Graphify)"] = "new test rule" in after and "graphify: use /graphify" in after and after.count("brain:global-copy") == 1
     hook_cmd = s2["hooks"]["PreToolUse"][0]["hooks"][0]["command"]
     projects_dir = cfg.get("layout", {}).get("projects", "projects")
     payload = json.dumps({"cwd": str(projects / "shop"), "tool_name": "Edit",

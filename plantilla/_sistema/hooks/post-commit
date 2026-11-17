@@ -1,0 +1,10 @@
+#!/bin/sh
+# Brain: after every commit, keep the global rules in the files every AI reads, and back up to the remote.
+HERE="$(cd "$(dirname "$0")" && pwd)"
+PY=python3
+"$PY" -c "" >/dev/null 2>&1 || PY=python
+# Copy _system/global.md to ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md (only the brain's own block there)
+"$PY" -I "$HERE/../scripts/sync_global.py"
+# Backup: push every commit when there is a remote; a failed push never blocks a commit
+if git remote | grep -q .; then git push -q origin HEAD >/dev/null 2>&1 & fi
+exit 0

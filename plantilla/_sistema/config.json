@@ -1,8 +1,7 @@
 {
+  "note": "La única lista de proyectos, tipos de página, zonas, puentes y topes. La leen connect.py, check.py, new_project.py y apply_views.py; para agregar un proyecto se usa new_project.py (o se agrega aquí): no hay que tocar ningún programa. Las palabras que dependen del idioma (nombres de carpetas, claves del encabezado) viven en layout.",
   "language": "es",
-  "project_folders": [
-    "C:/Users/TU-USUARIO/Proyectos"
-  ],
+  "project_folders": ["C:/Users/TU-USUARIO/Proyectos"],
   "company_folders": [],
   "layout": {
     "projects": "proyectos",
@@ -10,6 +9,128 @@
     "inbox": "entrada.md",
     "decisions": "decisiones",
     "decision_tag": "tipo: decision",
-    "unconfirmed": "por confirmar"
+    "unconfirmed": "por confirmar",
+    "type_key": "tipo",
+    "project_key": "proyecto",
+    "status_key": "estado",
+    "replaces_key": "reemplaza",
+    "status_current": "vigente",
+    "status_replaced": "reemplazada"
+  },
+  "projects": {
+    "tienda": {"name": "Tienda", "marketing": true, "parked": false}
+  },
+  "project_pages": {
+    "note": "Páginas mínimas de un proyecto y la plantilla (en _sistema/plantillas) con la que new_project.py crea cada una. Un proyecto aparcado (una idea) no está obligado a tenerlas.",
+    "templates": "plantillas",
+    "always": [
+      {"file": "{p}.md", "template": "proyecto"},
+      {"file": "{p}-estado.md", "template": "estado", "role": "status"},
+      {"file": "{p}-log.md", "template": "proyecto-bitacora"},
+      {"file": "entrada.md", "template": "proyecto-buzon"}
+    ],
+    "if_marketing": [
+      {"file": "{p}-marketing.md", "template": "marketing"},
+      {"file": "{p}-aprendizajes.md", "template": "proyecto-aprendizajes"},
+      {"file": "{p}-fuentes.md", "template": "proyecto-fuentes"}
+    ],
+    "folders": ["decisiones"]
+  },
+  "new_project": {
+    "tokens": {"project": "{{proyecto}}", "name": "{{nombre}}", "date": "{{fecha}}"},
+    "index_row": "| {name} | {{qué es}} | [[proyectos/{p}/{p}\\|{name}]] | [[proyectos/{p}/{p}-marketing\\|marketing]] |"
+  },
+  "types": {
+    "note": "history: páginas que registran lo que pasó (no lo que es verdad hoy); nunca se dibujan como enlaces. no_blocks: páginas donde ningún programa escribe.",
+    "valid": [
+      "indice",
+      "guia",
+      "proyecto",
+      "estado",
+      "marketing",
+      "aprendizajes",
+      "fuentes",
+      "bitacora",
+      "buzon",
+      "pendientes",
+      "revision",
+      "propuesta",
+      "decision",
+      "canal",
+      "principio",
+      "reglas",
+      "plantilla",
+      "rutas"
+    ],
+    "history": ["bitacora", "buzon", "pendientes", "revision", "propuesta"],
+    "no_blocks": ["bitacora", "buzon", "pendientes", "decision", "revision", "propuesta"]
+  },
+  "zones": [
+    {"path": "proyectos/", "layer": "island"},
+    {"path": "conocimiento/", "layer": "core"},
+    {"path": "empresa/", "layer": "company"},
+    {"path": "fuentes/", "layer": "sources"},
+    {"path": "revisiones/", "layer": "history"},
+    {"path": "_sistema/", "layer": "system"}
+  ],
+  "root_pages": {
+    "AGENTS": "door",
+    "index": "door",
+    "rutas-por-tarea": "door",
+    "CLAUDE": "system",
+    "log": "history"
+  },
+  "raw": ["fuentes/"],
+  "listing_suffix": "-indice",
+  "parts": {
+    "note": "Cada carpeta de un proyecto es una parte con una página central que reúne todas sus páginas; la portada del proyecto enlaza cada centro. El centro es: 1) centers (fijo); 2) una página en la raíz de la carpeta llamada como uno de names; 3) la única página ahí con tipo center_type. Si no hay, connect.py escribe generated_name (junto a la carpeta, en la raíz del proyecto, para las de outside_folder).",
+    "centers": {},
+    "names": ["{p}-{folder}", "{folder}-{p}", "{folder}", "README"],
+    "center_type": "indice",
+    "generated_name": "{p}-{folder}",
+    "suffix_if_clash": "-parte",
+    "outside_folder": ["decisiones"]
+  },
+  "bridges": [
+    {"page": "rutas-por-tarea", "text": "rutas por tarea"},
+    {"page": "conocimiento/conocimiento", "text": "conocimiento compartido"},
+    {"page": "empresa/pendientes", "text": "lo que espera por el dueño"},
+    {"page": "proyectos/{p}/entrada", "text": "buzón de {name}"}
+  ],
+  "cited": {
+    "note": "Lo que la portada de un proyecto muestra que cita del núcleo (groups), y las páginas del núcleo que reciben un bloque 'Dónde se aplica' (applied_in). Los principios nunca se listan en una portada: sería un enlace por principio.",
+    "groups": [
+      {"id": "channels", "title": "Canales", "path": "conocimiento/canales/"}
+    ],
+    "applied_in": ["conocimiento/canales/", "conocimiento/principios/"]
+  },
+  "limits": {
+    "max_links_hand": 60,
+    "max_cite_decision": 20,
+    "applied_max": 10,
+    "status_kb": 6,
+    "status_lines": 60,
+    "log_kb": 100,
+    "hops": 2,
+    "same_link_share": 0.8,
+    "same_link_min_pages": 5
+  },
+  "checks": {
+    "note": "Lo que usa check.py. frozen: enlaces que ya rompían una regla el día en que se adoptó; el control falla solo si aparece uno NUEVO, y avisa cuando uno ya no hace falta.",
+    "routes": "rutas-por-tarea",
+    "key_pages": ["rutas-por-tarea", "conocimiento/conocimiento", "empresa/pendientes"],
+    "required_reads": {
+      "AGENTS.md": ["rutas-por-tarea"],
+      "_sistema/global.md": ["rutas-por-tarea"]
+    },
+    "example_links": [],
+    "always_linkable": ["empresa/pendientes"],
+    "index_page": "index",
+    "frozen": {
+      "island_to_island": [],
+      "core_to_island": [],
+      "core_to_history": [],
+      "core_to_company": []
+    }
   }
 }

@@ -6,6 +6,11 @@ type: index
 
 Everything we know, decide and learn, in one place. The rules for AIs are in `AGENTS.md`.
 
+## Where to start
+
+- [[AGENTS|The rules]] and [[task-routes|task routes]]: "you are going to do X, read Y". One table; start there.
+- [[company/pending|What waits for the owner]].
+
 ## Projects
 
 | Project | What it is | Start here | Marketing |
@@ -26,5 +31,5 @@ Everything we know, decide and learn, in one place. The rules for AIs are in `AG
 ## System
 
 - `_system/global.md`: the rules every AI reads in any folder.
-- `_system/templates/`: decision and marketing templates.
+- `_system/templates/`: the templates of every kind of page.
 - [[reviews/reviews|Weekly reviews]] and the [[log|brain log]].

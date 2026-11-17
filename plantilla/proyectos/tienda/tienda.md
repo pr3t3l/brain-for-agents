@@ -15,3 +15,15 @@ Tienda en línea de café de especialidad que vende bolsas de 340 g y una suscri
 - [[proyectos/tienda/tienda-fuentes|Fuentes]]: dónde viven los documentos reales.
 - [[proyectos/tienda/tienda-log|Bitácora]].
 - Decisiones: en `decisiones/`, y todas juntas en la [[decisiones.base|tabla de decisiones]].
+
+<!-- brain:links:start -->
+## Conocimiento central y puentes
+
+**Puentes fijos:** [[rutas-por-tarea|rutas por tarea]] · [[conocimiento/conocimiento|conocimiento compartido]] · [[empresa/pendientes|lo que espera por el dueño]] · [[proyectos/tienda/entrada|buzón de Tienda]]
+
+**Lo que Tienda cita del núcleo** (entre paréntesis, cuántas páginas): canales: [[conocimiento/canales/instagram|Instagram]] (2)
+
+**Partes de Tienda** (cada carpeta tiene una página que reúne todas sus páginas; entre paréntesis, cuántas tiene):
+
+- [[proyectos/tienda/tienda-decisiones|Decisiones]] (2 páginas)
+<!-- brain:links:end -->

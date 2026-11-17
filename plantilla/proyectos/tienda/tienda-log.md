@@ -1,3 +1,8 @@
+---
+tipo: bitacora
+proyecto: tienda
+---
+
 # Bitácora de Tienda (ejemplo)
 
 ## [2026-01-10] decisión | Precio de lanzamiento

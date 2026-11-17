@@ -3,8 +3,9 @@
 Usage: python -I install.py [--dry-run]
 
 What it does (backing up every file before its first change, as <name>.before-brain):
-1. Starts a git repo in the brain if there is none, with a post-commit hook that copies global.md
-   to ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md, and pushes when there is a remote.
+1. Starts a git repo in the brain if there is none and points core.hooksPath at _system/hooks:
+   pre-commit runs the check (check.py) and blocks a commit that breaks a rule; post-commit copies global.md
+   to ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md and pushes when there is a remote.
 2. Writes those two global files now.
 3. Claude Code (~/.claude/settings.json): the brain as an extra working folder, permission to edit it,
    the guardian (PreToolUse) and the reminder (Stop) hooks.
@@ -63,22 +64,22 @@ if not CFG["projects"]:
     sys.exit(t(f"First edit {SYSTEM / 'config.json'}: put the folder (or folders) where your projects live in 'project_folders'.",
                f"Primero edita {SYSTEM / 'config.json'}: pon en 'project_folders' la carpeta (o carpetas) donde viven tus proyectos."))
 
-# 1. git and the post-commit hook
+# 1. git and the hooks (core.hooksPath points at the brain's own _system/hooks, so the hooks are versioned with it)
 if not (BRAIN / ".git").exists():
     say(f"git init {BRAIN}")
     if not DRY:
         subprocess.run(["git", "init", "-q", "-b", "main", str(BRAIN)], check=True)
-hook = BRAIN / ".git" / "hooks" / "post-commit"
-write(hook, "\n".join([
-    "#!/bin/sh",
-    "# Copy global.md to ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md",
-    f'"{PY}" -I "$(git rev-parse --show-toplevel)/{SYS_DIR}/scripts/sync_global.py"',
-    "# Backup: push every commit when there is a remote; a failed push never blocks the commit",
-    "if git remote | grep -q .; then git push -q origin HEAD >/dev/null 2>&1 & fi",
-    "",
-]))
-if not DRY:
-    hook.chmod(0o755)
+HOOKS = f"{SYS_DIR}/hooks"
+current = subprocess.run(["git", "-C", str(BRAIN), "config", "--get", "core.hooksPath"], capture_output=True, text=True).stdout.strip() if (BRAIN / ".git").exists() else ""
+if current and current != HOOKS:
+    say(t(f"core.hooksPath is already '{current}': not changing it. Point it at {HOOKS} by hand if you want the brain's hooks.",
+          f"core.hooksPath ya es '{current}': no lo cambio. Apúntalo a {HOOKS} a mano si quieres los hooks del cerebro."))
+else:
+    say(f"git config core.hooksPath {HOOKS}  (pre-commit: the check; post-commit: global rules + push)")
+    if not DRY:
+        subprocess.run(["git", "-C", str(BRAIN), "config", "core.hooksPath", HOOKS], check=True)
+        for hook in (BRAIN / HOOKS).glob("*"):
+            hook.chmod(0o755)
 
 # 2. global rules for both tools: backup first, then our block goes on top and anything already there is kept
 for target in [HOME / ".claude" / "CLAUDE.md", HOME / ".codex" / "AGENTS.md"]:

@@ -1,3 +1,8 @@
+---
+type: sources
+project: shop
+---
+
 # Shop sources (example)
 
 Where the project's real documents live, one line per source:

@@ -1,0 +1,19 @@
+#!/bin/sh
+# Brain: no commit goes in while the check (check.py) finds failures, even if they come from another session: the brain
+# belongs to everyone, so whoever finds the failure fixes it. Activated once per copy with (install.py does it):
+#   git config core.hooksPath _system/hooks
+# The autosave sets BRAIN_AUTOSAVE=1: it always saves (never lose work) and writes the failures in its commit message.
+[ "$BRAIN_AUTOSAVE" = "1" ] && exit 0
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(git rev-parse --show-toplevel)"
+PY=python3
+"$PY" -c "" >/dev/null 2>&1 || PY=python
+OUT="$("$PY" -I "$HERE/../scripts/check.py" "$ROOT" 2>&1)"
+if [ $? -ne 0 ]; then
+  echo "$OUT" | awk '/^FAIL/{f=1} /^WARN|^check:/{f=0} f' | head -40
+  echo ""
+  echo "The brain check found failures: fix them and commit again."
+  echo "El control del cerebro encontro fallas: arreglalas y vuelve a hacer el commit."
+  exit 1
+fi
+exit 0

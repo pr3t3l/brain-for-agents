@@ -6,6 +6,11 @@ tipo: indice
 
 Todo lo que sabemos, decidimos y aprendemos, en un solo lugar. Las reglas para las IA están en `AGENTS.md`.
 
+## Por dónde empezar
+
+- [[AGENTS|Las reglas]] y las [[rutas-por-tarea|rutas por tarea]]: "vas a hacer X, lee Y". Una sola tabla; empieza ahí.
+- [[empresa/pendientes|Lo que espera por el dueño]].
+
 ## Proyectos
 
 | Proyecto | Qué es | Empieza aquí | Marketing |
@@ -26,5 +31,5 @@ Todo lo que sabemos, decidimos y aprendemos, en un solo lugar. Las reglas para l
 ## Sistema
 
 - `_sistema/global.md`: las reglas que leen todas las IA en cualquier carpeta.
-- `_sistema/plantillas/`: plantillas de decisión y de marketing.
+- `_sistema/plantillas/`: las plantillas de cada tipo de página.
 - [[revisiones/revisiones|Revisiones semanales]] y [[log|bitácora del cerebro]].

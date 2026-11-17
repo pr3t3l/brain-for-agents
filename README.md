@@ -32,6 +32,10 @@ Karpathy's pattern is designed for **one wiki, one person and one AI**. Using it
 | Nobody checks the wiki is still true | **A scheduled weekly review** that checks against the sources, fixes what it can and leaves you at most 5 questions |
 | If the computer dies, it is gone | **A GitHub backup** on every commit |
 | What one project learns does not help another | **Learnings per project**, gathered by channel in the weekly review |
+| A pile of pages nobody can find a way around | **One core, project islands and fixed bridges,** task routes ("you are going to do X, read Y") and link rules: [the method](docs/the-method.md) |
+| A rule written in prose that nothing enforces | **A check** that fails when a rule is broken, a **pre-commit hook** that stops the commit, and tests that provoke the breakages: [the programs](docs/the-programs.md) |
+| Nobody knows whether a fresh AI applies what was decided | **The ten-task test:** a procedure that measures it: [the test](docs/ten-task-test.md) |
+| Work left unsaved, or lost in a conflict | **Autosave** every 10 minutes that never loses work and never forces a merge |
 | The AI greps around the code to find what breaks | **Nested code maps:** each repo keeps a [Graphify](https://github.com/safishamsi/graphify) code graph, and the global rules tell every agent to use it first and keep it fresh |
 
 This is not "better than Karpathy". It is his idea, plus the operating layer you need when several projects and several agents work at once.
@@ -42,16 +46,20 @@ This is not "better than Karpathy". It is his idea, plus the operating layer you
 brain/                           ← an Obsidian vault and a (private) git repo
   AGENTS.md  CLAUDE.md           ← the brain's rules
   index.md   log.md              ← front page and log
+  task-routes.md                 ← "you are going to do X, read Y": the one table to enter by
   decisions.base                 ← live table of every decision
   _system/
     global.md                    ← rules EVERY AI loads, in any folder
-    config.json                  ← where your projects live, and the brain's language
-    templates/  scripts/  weekly-review.md
+    config.json                  ← the one list of projects, types, bridges and limits
+    templates/  weekly-review.md
+    scripts/                     ← connect.py, check.py, new_project.py, autosave.py, apply_views.py, tests...
+    hooks/                       ← pre-commit (runs the check) and post-commit (global rules + push)
+    obsidian/                    ← graph colors and views, written by apply_views.py
   knowledge/                     ← what serves every project: channels, sourced principles
   sources/                       ← raw documents, never edited
   projects/
     shop/                        ← one project: shop.md, shop-status.md, shop-marketing.md,
-      decisions/                   shop-learnings.md, shop-sources.md, shop-log.md
+      decisions/                   shop-learnings.md, shop-sources.md, shop-log.md, inbox.md
   company/   inbox.md            ← what cuts across projects, and the notice inbox
   reviews/                       ← weekly reports
 ```
@@ -72,7 +80,7 @@ global rules  ← every session, any folder: "the brain is here; if the repo has
 
 We don't run Graphify on the brain: the brain's `[[links]]` already make its graph, and Graphify reads documents with a model (tokens). Setup, tips and a more advanced four-map setup: [docs/code-maps.md](docs/code-maps.md).
 
-There are two templates with the same scripts: `template/` in English and `plantilla/` in Spanish. The language and the folder names are set in `_system/config.json`.
+There are two templates with the same scripts: `template/` in English and `plantilla/` in Spanish. The language and the folder names are set in `_system/config.json`. The shape is one core, one island per project and fixed bridges between them, kept by programs and not by good intentions: see [the method](docs/the-method.md).
 
 ## Install it (about 20 minutes)
 
@@ -85,12 +93,13 @@ You need Python 3.11 or newer, git, and Claude Code and/or Codex. Obsidian is op
    ```
 2. **Edit `_system/config.json`:** in `project_folders`, put the folder where your projects live (each subfolder is one project). If you have a company folder, put it in `company_folders`.
 3. **Edit `_system/global.md`:** who you are, your projects, the brain's path and your rules. Every AI will always read it, so keep it short.
-4. **Test the guards:** `python -I _system/scripts/test_guards.py` must print `ALL GOOD`.
-5. **Install:** first `python -I _system/scripts/install.py --dry-run` to see what will change, then again without `--dry-run`. It backs up every file before changing it (`*.before-brain`).
+4. **Run the tests:** `python -I _system/scripts/test_guards.py` and `python -I _system/scripts/test_brain.py` must both print `ALL GOOD`, and `python -I _system/scripts/check.py` must say `0 failures`.
+5. **Install:** first `python -I _system/scripts/install.py --dry-run` to see what will change, then again without `--dry-run`. It backs up every file before changing it (`*.before-brain`), and points git's `core.hooksPath` at `_system/hooks` so the check runs before every commit.
 6. **Backup (recommended):** create a **private** GitHub repo and connect it (`git remote add origin ...`). From then on, every commit is pushed automatically.
-7. **Weekly review (recommended):** create a scheduled task with the text in `_system/weekly-review.md`.
-8. Open the folder as a vault in Obsidian, delete the example project `projects/shop` and create your own.
-9. **Code maps (recommended):** give each project repo a Graphify code graph, as in [docs/code-maps.md](docs/code-maps.md).
+7. **Autosave (recommended):** schedule `python -I _system/scripts/autosave.py` every 10 minutes (Task Scheduler on Windows, cron on macOS and Linux: see [the programs](docs/the-programs.md)).
+8. **Weekly review (recommended):** create a scheduled task with the text in `_system/weekly-review.md`.
+9. Open the folder as a vault in Obsidian. Create your first project with `python -I _system/scripts/new_project.py . <folder> "<Name>"`, then delete the example: the folder `projects/shop`, its entry in `projects` of `config.json` and its row in `index.md`; run `connect.py` and `check.py`.
+10. **Code maps (recommended):** give each project repo a Graphify code graph, as in [docs/code-maps.md](docs/code-maps.md).
 
 Open a **new** Claude Code or Codex session: global rules load when a session starts.
 
@@ -104,14 +113,17 @@ Open a **new** Claude Code or Codex session: global rules load when a session st
 | Marketing or decisions for **one** project | `brain/projects/<project>` |
 | Something across several projects | The root of the brain |
 
-Work as usual. When you decide something or numbers come in, the AI notes it right then. If it forgets, the reminder nudges it. Every week, the review brings everything up to date and leaves you its questions.
+Work as usual. When you decide something or numbers come in, the AI notes it right then. If it forgets, the reminder nudges it. After you create a page or a folder, run `connect.py`; the pre-commit check stops a commit that breaks a rule, and whoever sees the failure fixes it. Every week, the review runs the check and leaves you its questions.
 
 ## More
 
+- [The method](docs/the-method.md): one core, project islands and fixed bridges, the link rules and the six conditions of "it works".
+- [The programs](docs/the-programs.md): how the connector, the check, the hooks and the autosave fit together.
+- [The ten-task test](docs/ten-task-test.md): how to measure that fresh AI sessions apply what was decided, with a sample task list.
 - [How it works inside](docs/how-it-works.md), including its honest limits.
 - [The brain and the code maps](docs/code-maps.md): how it nests with Graphify.
 - [FAQ](docs/faq.md): every question I asked myself while building it.
-- In Spanish: [README](README.es.md), [cómo funciona](docs/es/como-funciona.md), [mapas de código](docs/es/mapas-de-codigo.md), [preguntas frecuentes](docs/es/preguntas.md).
+- In Spanish: [README](README.es.md), [el método](docs/es/el-metodo.md), [los programas](docs/es/los-programas.md), [la prueba de las diez tareas](docs/es/prueba-de-diez-tareas.md), [cómo funciona](docs/es/como-funciona.md), [mapas de código](docs/es/mapas-de-codigo.md), [preguntas frecuentes](docs/es/preguntas.md).
 
 ## Credits and license
 

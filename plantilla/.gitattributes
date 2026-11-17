@@ -1,0 +1,8 @@
+# Two sessions appending at the end of a log, an inbox or the pending list at the same time: keep both entries.
+*-log.md merge=union
+log.md merge=union
+inbox.md merge=union
+pending.md merge=union
+
+# Hooks are shell scripts: they must keep LF line endings on Windows too.
+hooks/* text eol=lf

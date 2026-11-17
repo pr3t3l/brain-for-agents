@@ -11,6 +11,18 @@ I am {{your name}}. My projects: {{project 1 (what it is)}}, {{project 2 (what i
 - **Each project's code** lives in `{{projects folder}}`. The brain holds no code.
 - **Code maps:** if the repo you work in has `MAPS.md` or a `graphify-out/` folder, query it before searching by hand ("which file does this, and what breaks if I change it?") and follow its `AGENTS.md` rules to keep it fresh. If the repo says nothing, run `graphify update .` after big code changes (code only, no tokens).
 
+## Before doing this, read this
+Before any task, open `task-routes.md` in the brain: one row per task, with what to read, in order. The short version:
+
+| You are going to… | Read first |
+|---|---|
+| Do marketing or content | `knowledge/knowledge.md`, then the project's `<project>-marketing.md` |
+| Plan a post or a campaign | the hook principle and the channel's page in `knowledge/`, before writing |
+| Write or review code | the project's cover and the repo's code map; cite the rule you apply |
+| Record or change a decision | `_system/templates/decision.md`; never edit an old decision, create a new one |
+| Open a new project | `task-routes.md`, then `python -I _system/scripts/new_project.py` |
+| Anything else, or if in doubt | `task-routes.md`, then `index.md` |
+
 ## How to work with me
 - {{how you want to be talked to; for example: plainly, no jargon}}.
 - If in this session I decide something, a task is finished or numbers come in, **note it right then** in the brain, in the folder of the project you are working on, following the brain's `AGENTS.md`. Do not wait for the end: my sessions never close.

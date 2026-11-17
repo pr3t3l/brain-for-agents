@@ -22,7 +22,7 @@ No. Graphify adds a line to `~/.claude/CLAUDE.md`. The brain's sync only replace
 ## About the structure
 
 **One brain for the whole company, or one per project?**
-One for everything, with a folder per project. Projects can link to each other, you see every decision in one table, and there is one repo to back up. If a project someday has partners, its folder can be split out without breaking anything.
+One for everything, with a folder per project. Projects share one core of knowledge (they do not link to each other: see [the method](the-method.md)), you see every decision in one table, and there is one repo to back up. If a project someday has partners, its folder can be split out without breaking anything.
 
 **But with one global brain, don't I have to open every chat from there?**
 No. The global rules load in every session, wherever you open it. You open the chat in your project and the AI still knows where the brain is.

@@ -1,3 +1,7 @@
+---
+type: log
+---
+
 # Brain log
 
 Append only. Format: `## [YYYY-MM-DD] type | title`.

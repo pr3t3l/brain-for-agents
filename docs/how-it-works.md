@@ -58,7 +58,7 @@ A decision is never edited. If it changes, a new one is created and the old one 
 
 It is a scheduled Claude task (instructions in `_system/weekly-review.md`) that runs from the root of the brain:
 
-- checks health (broken links, repeated names);
+- runs the check (`check.py`: broken links, link-rule breakages, repeated names, projects out of order) and the connector (`connect.py`);
 - reads each project's sources and updates statuses and decisions;
 - gathers each project's learnings into the channel pages;
 - leaves a report with at most 5 questions for you;
@@ -66,7 +66,7 @@ It is a scheduled Claude task (instructions in `_system/weekly-review.md`) that 
 
 ## 8. Language and layout
 
-`_system/config.json` sets `language` (`en` or `es`) and the folder names (`layout`). The scripts are identical in both templates; only the config changes. That means you can rename folders without touching code.
+`_system/config.json` sets `language` (`en` or `es`), the folder names and the header keys (`layout`), the projects, the page types, the bridges and the limits. The scripts are identical in both templates; only the config (and `_system/obsidian/views.json`) changes. That means you can rename folders without touching code. The shape of the brain, and the programs that keep it, are explained in [the method](the-method.md) and [the programs](the-programs.md).
 
 ## 9. How many tokens does it cost?
 

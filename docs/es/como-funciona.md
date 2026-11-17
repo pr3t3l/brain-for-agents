@@ -58,7 +58,7 @@ Una decisión nunca se edita: si cambia, se crea otra y la vieja se marca `reemp
 
 Es una tarea programada de Claude (instrucciones en `_sistema/revision-semanal.md`) que corre desde la raíz del cerebro:
 
-- revisa la salud (enlaces rotos, nombres repetidos);
+- corre el control (`check.py`: enlaces rotos, reglas de enlaces, nombres repetidos, proyectos desordenados) y el conector (`connect.py`);
 - lee las fuentes de cada proyecto y actualiza estados y decisiones;
 - junta lo aprendido de cada proyecto en las páginas de canal;
 - deja un informe con máximo 5 preguntas para ti;
@@ -66,7 +66,7 @@ Es una tarea programada de Claude (instrucciones en `_sistema/revision-semanal.m
 
 ## 8. Idioma y nombres de carpetas
 
-`_sistema/config.json` define el idioma (`language`: `es` o `en`) y los nombres de las carpetas (`layout`). Los scripts son idénticos en la plantilla en inglés (`template/`) y en la de español (`plantilla/`); solo cambia la configuración. Así puedes renombrar carpetas sin tocar código.
+`_sistema/config.json` define el idioma (`language`: `es` o `en`) y los nombres de las carpetas y las claves del encabezado (`layout`), los proyectos, los tipos de página, los puentes y los topes. Los scripts son idénticos en la plantilla en inglés (`template/`) y en la de español (`plantilla/`); solo cambian la configuración y `_sistema/obsidian/views.json`. Así puedes renombrar carpetas sin tocar código. La forma del cerebro y los programas que la cuidan están en [el método](el-metodo.md) y [los programas](los-programas.md).
 
 ## 9. ¿Cuánto cuesta en tokens?
 

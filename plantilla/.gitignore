@@ -2,3 +2,5 @@
 .obsidian/cache
 .trash/
 __pycache__/
+.obsidian/*.before-*
+*.before-brain

@@ -1,3 +1,8 @@
+---
+tipo: fuentes
+proyecto: tienda
+---
+
 # Fuentes de Tienda (ejemplo)
 
 Dónde viven los documentos reales del proyecto, una línea por fuente:

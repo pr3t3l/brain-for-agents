@@ -1,10 +1,10 @@
 ---
 type: marketing
-project: 
-updated: 
+project: {{project}}
+updated: {{date}}
 ---
 
-# Marketing of {{project}}
+# {{name}} marketing
 
 ## What we sell
 Product, format and price. What the customer gets.

@@ -26,6 +26,10 @@ El patrón de Karpathy está pensado para **una wiki, una persona y una IA**. Al
 | Nadie revisa que la wiki siga siendo verdad | **Revisión semanal** programada que contrasta con las fuentes, arregla y te deja máximo 5 preguntas |
 | Si se daña el computador, se pierde | **Respaldo en GitHub** con cada commit |
 | Lo que aprende un proyecto no le sirve a otro | **Aprendizajes por proyecto** que la revisión semanal junta por canal |
+| Un montón de páginas sin camino claro para entrar | **Un núcleo, islas por proyecto y puentes fijos,** rutas por tarea ("vas a hacer X, lee Y") y reglas de enlaces: [el método](docs/es/el-metodo.md) |
+| Una regla escrita en prosa que nada hace cumplir | **Un control** que falla cuando se rompe una regla, un **gancho pre-commit** que frena el commit, y pruebas que provocan las roturas: [los programas](docs/es/los-programas.md) |
+| Nadie sabe si una IA nueva aplica lo decidido | **La prueba de las diez tareas:** un procedimiento que lo mide: [la prueba](docs/es/prueba-de-diez-tareas.md) |
+| Trabajo sin guardar, o perdido en un choque | **Guardado automático** cada 10 minutos que nunca pierde trabajo ni fuerza una unión |
 | La IA busca a ciegas en el código qué se rompe | **Mapas de código anidados:** cada repo tiene su mapa de [Graphify](https://github.com/safishamsi/graphify), y las reglas globales le dicen a todo agente que lo use primero y lo mantenga al día |
 
 No es "mejor que Karpathy": es su idea, más la capa de operación que hace falta cuando hay varios proyectos y varios agentes trabajando a la vez.
@@ -36,16 +40,20 @@ No es "mejor que Karpathy": es su idea, más la capa de operación que hace falt
 cerebro/                         ← una bóveda de Obsidian y un repo de git (privado)
   AGENTS.md  CLAUDE.md           ← las reglas del cerebro
   index.md   log.md              ← la portada y la bitácora
+  rutas-por-tarea.md             ← "vas a hacer X, lee Y": la única tabla por la que se entra
   decisiones.base                ← tabla en vivo con todas las decisiones
   _sistema/
     global.md                    ← reglas que TODA IA carga en cualquier carpeta
-    config.json                  ← dónde viven tus proyectos y el idioma del cerebro
-    plantillas/  scripts/  revision-semanal.md
+    config.json                  ← la única lista de proyectos, tipos, puentes y topes
+    plantillas/  revision-semanal.md
+    scripts/                     ← connect.py, check.py, new_project.py, autosave.py, apply_views.py, pruebas...
+    hooks/                       ← pre-commit (corre el control) y post-commit (reglas globales + subir)
+    obsidian/                    ← colores y vistas del grafo, que escribe apply_views.py
   conocimiento/                  ← lo que sirve a todos: canales, principios con fuente
   fuentes/                       ← documentos crudos, no se editan
   proyectos/
     tienda/                      ← un proyecto: tienda.md, tienda-estado.md, tienda-marketing.md,
-      decisiones/                  tienda-aprendizajes.md, tienda-fuentes.md, tienda-log.md
+      decisiones/                  tienda-aprendizajes.md, tienda-fuentes.md, tienda-log.md, entrada.md
   empresa/   entrada.md          ← lo que cruza proyectos y el buzón de avisos
   revisiones/                    ← informes semanales
 ```
@@ -77,12 +85,13 @@ Necesitas Python 3.11 o más nuevo, git, y Claude Code y/o Codex. Obsidian es op
    ```
 2. **Edita `_sistema/config.json`:** en `project_folders`, la carpeta donde viven tus proyectos (cada subcarpeta es un proyecto). Si tienes una carpeta de empresa, ponla en `company_folders`.
 3. **Edita `_sistema/global.md`:** quién eres, tus proyectos, la ruta del cerebro y tus prohibiciones. Es lo que toda IA va a leer siempre, así que mantenlo corto.
-4. **Prueba los guardianes:** `python -I _sistema/scripts/test_guards.py` debe decir `ALL GOOD`.
-5. **Instala:** primero `python -I _sistema/scripts/install.py --dry-run` para ver qué va a cambiar, y luego sin `--dry-run`. Respalda cada archivo que toca (`*.before-brain`).
+4. **Corre las pruebas:** `python -I _sistema/scripts/test_guards.py` y `python -I _sistema/scripts/test_brain.py` deben decir `ALL GOOD`, y `python -I _sistema/scripts/check.py` debe decir `0 fallas`.
+5. **Instala:** primero `python -I _sistema/scripts/install.py --dry-run` para ver qué va a cambiar, y luego sin `--dry-run`. Respalda cada archivo que toca (`*.before-brain`) y apunta el `core.hooksPath` de git a `_sistema/hooks` para que el control corra antes de cada commit.
 6. **Respaldo (recomendado):** crea un repo **privado** en GitHub y conéctalo (`git remote add origin ...`). Desde ahí cada commit se sube solo.
-7. **Revisión semanal (recomendado):** crea una tarea programada con el texto de `_sistema/revision-semanal.md`.
-8. Abre la carpeta como bóveda en Obsidian, borra el proyecto de ejemplo `proyectos/tienda` y crea el tuyo.
-9. **Mapas de código (recomendado):** dale a cada repo de proyecto su mapa de Graphify, como explica [docs/es/mapas-de-codigo.md](docs/es/mapas-de-codigo.md).
+7. **Guardado automático (recomendado):** programa `python -I _sistema/scripts/autosave.py` cada 10 minutos (Programador de tareas en Windows, cron en macOS y Linux: ver [los programas](docs/es/los-programas.md)).
+8. **Revisión semanal (recomendado):** crea una tarea programada con el texto de `_sistema/revision-semanal.md`.
+9. Abre la carpeta como bóveda en Obsidian. Crea tu primer proyecto con `python -I _sistema/scripts/new_project.py . <carpeta> "<Nombre>"` y luego borra el ejemplo: la carpeta `proyectos/tienda`, su entrada en `projects` de `config.json` y su fila en `index.md`; corre `connect.py` y `check.py`.
+10. **Mapas de código (recomendado):** dale a cada repo de proyecto su mapa de Graphify, como explica [docs/es/mapas-de-codigo.md](docs/es/mapas-de-codigo.md).
 
 Abre una sesión **nueva** de Claude Code o Codex: las reglas globales se cargan al iniciar.
 
@@ -96,10 +105,13 @@ Abre una sesión **nueva** de Claude Code o Codex: las reglas globales se cargan
 | Marketing o decisiones de **un** proyecto | `cerebro/proyectos/<proyecto>` |
 | Algo que cruza varios proyectos | La raíz del cerebro |
 
-Trabaja normal. Cuando decidas algo o llegue un número, la IA lo anota en ese momento. Si se le olvida, el aviso se lo recuerda. Cada semana, la revisión pone todo al día y te deja sus preguntas.
+Trabaja normal. Cuando decidas algo o llegue un número, la IA lo anota en ese momento. Si se le olvida, el aviso se lo recuerda. Después de crear una página o una carpeta, corre `connect.py`; el control del pre-commit frena un commit que rompe una regla, y quien ve la falla la arregla. Cada semana, la revisión corre el control y te deja sus preguntas.
 
 ## Más
 
+- [El método](docs/es/el-metodo.md): un núcleo, islas por proyecto y puentes fijos, las reglas de enlaces y las seis condiciones de "funciona bien".
+- [Los programas](docs/es/los-programas.md): cómo encajan el conector, el control, los ganchos y el guardado automático.
+- [La prueba de las diez tareas](docs/es/prueba-de-diez-tareas.md): cómo medir que las sesiones nuevas de IA aplican lo decidido, con una lista de tareas de ejemplo.
 - [Cómo funciona por dentro](docs/es/como-funciona.md), con sus límites honestos.
 - [El cerebro y los mapas de código](docs/es/mapas-de-codigo.md): cómo se anida con Graphify.
 - [Preguntas frecuentes](docs/es/preguntas.md): todas las que me hice armándolo.

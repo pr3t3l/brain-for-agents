@@ -1,3 +1,8 @@
+---
+type: log
+project: shop
+---
+
 # Shop log (example)
 
 ## [2026-01-10] decision | Launch price

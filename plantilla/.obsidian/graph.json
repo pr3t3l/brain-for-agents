@@ -1,10 +1,47 @@
 {
   "showOrphans": true,
   "colorGroups": [
-    {"query": "path:proyectos", "color": {"a": 1, "rgb": 15105570}},
-    {"query": "path:conocimiento/canales", "color": {"a": 1, "rgb": 3381759}},
-    {"query": "path:conocimiento/principios", "color": {"a": 1, "rgb": 8421504}},
-    {"query": "path:empresa", "color": {"a": 1, "rgb": 10181046}},
-    {"query": "path:fuentes", "color": {"a": 1, "rgb": 5025616}}
+    {
+      "query": "[tipo:bitacora] OR [tipo:buzon] OR [tipo:pendientes] OR [tipo:revision] OR [tipo:propuesta] OR path:\"decisiones/\" OR path:\"revisiones/\"",
+      "color": {
+        "a": 1,
+        "rgb": 9080728
+      }
+    },
+    {
+      "query": "path:\"_sistema/\" OR path:/^[^\\/]+$/ OR path:/-indice(\\.md)?$/",
+      "color": {
+        "a": 1,
+        "rgb": 6054768
+      }
+    },
+    {
+      "query": "path:\"fuentes/\"",
+      "color": {
+        "a": 1,
+        "rgb": 8350293
+      }
+    },
+    {
+      "query": "path:\"conocimiento/\"",
+      "color": {
+        "a": 1,
+        "rgb": 3381759
+      }
+    },
+    {
+      "query": "path:\"empresa/\"",
+      "color": {
+        "a": 1,
+        "rgb": 10181046
+      }
+    },
+    {
+      "query": "path:\"proyectos/tienda/\"",
+      "color": {
+        "a": 1,
+        "rgb": 15105570
+      }
+    }
   ]
 }

@@ -1,10 +1,47 @@
 {
   "showOrphans": true,
   "colorGroups": [
-    {"query": "path:projects", "color": {"a": 1, "rgb": 15105570}},
-    {"query": "path:knowledge/channels", "color": {"a": 1, "rgb": 3381759}},
-    {"query": "path:knowledge/principles", "color": {"a": 1, "rgb": 8421504}},
-    {"query": "path:company", "color": {"a": 1, "rgb": 10181046}},
-    {"query": "path:sources", "color": {"a": 1, "rgb": 5025616}}
+    {
+      "query": "[type:log] OR [type:inbox] OR [type:pending] OR [type:review] OR [type:proposal] OR path:\"decisions/\" OR path:\"reviews/\"",
+      "color": {
+        "a": 1,
+        "rgb": 9080728
+      }
+    },
+    {
+      "query": "path:\"_system/\" OR path:/^[^\\/]+$/ OR path:/-index(\\.md)?$/",
+      "color": {
+        "a": 1,
+        "rgb": 6054768
+      }
+    },
+    {
+      "query": "path:\"sources/\"",
+      "color": {
+        "a": 1,
+        "rgb": 8350293
+      }
+    },
+    {
+      "query": "path:\"knowledge/\"",
+      "color": {
+        "a": 1,
+        "rgb": 3381759
+      }
+    },
+    {
+      "query": "path:\"company/\"",
+      "color": {
+        "a": 1,
+        "rgb": 10181046
+      }
+    },
+    {
+      "query": "path:\"projects/shop/\"",
+      "color": {
+        "a": 1,
+        "rgb": 15105570
+      }
+    }
   ]
 }

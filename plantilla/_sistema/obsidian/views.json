@@ -1,0 +1,91 @@
+{
+  "note": "Referencia de las vistas del grafo de Obsidian. La verdad vive aquí y en la lista de proyectos de _sistema/config.json; .obsidian/graph.json y .obsidian/bookmarks.json se ponen al día desde este archivo con _sistema/scripts/apply_views.py (colores, filtro por defecto y un marcador por vista), solo con Obsidian cerrado. Un proyecto nuevo recibe su color y su vista solo. En una consulta, {history} es todos los tipos de historia de config.json y {not_history} lo mismo, negado. Este archivo guarda nombres de carpetas: es el único lugar que cambia según el idioma.",
+  "bookmark_group": "Vistas del cerebro",
+  "switches": {
+    "showTags": false,
+    "showAttachments": false,
+    "hideUnresolved": true,
+    "showOrphans": false
+  },
+  "layer_colors": [
+    {
+      "name": "Historia",
+      "query": "{history} OR path:\"decisiones/\" OR path:\"revisiones/\"",
+      "rgb": 9080728,
+      "hex": "8A8F98",
+      "paints": "bitácoras, buzones, pendientes, decisiones y revisiones: lo que pasó"
+    },
+    {
+      "name": "Sistema y listados",
+      "query": "path:\"_sistema/\" OR path:/^[^\\/]+$/ OR path:/-indice(\\.md)?$/",
+      "rgb": 6054768,
+      "hex": "5C6370",
+      "paints": "reglas, plantillas, páginas de la raíz e índices generados"
+    },
+    {
+      "name": "Fuentes",
+      "query": "path:\"fuentes/\"",
+      "rgb": 8350293,
+      "hex": "7F6A55",
+      "paints": "documentos crudos"
+    },
+    {
+      "name": "Conocimiento",
+      "query": "path:\"conocimiento/\"",
+      "rgb": 3381759,
+      "hex": "3399FF",
+      "paints": "el núcleo compartido"
+    },
+    {
+      "name": "Empresa",
+      "query": "path:\"empresa/\"",
+      "rgb": 10181046,
+      "hex": "9B59B6",
+      "paints": "lo que cruza los proyectos"
+    }
+  ],
+  "project_colors": {
+    "tienda": 15105570
+  },
+  "spare_colors": [
+    3447003,
+    3066993,
+    16734827,
+    1752220,
+    15844367,
+    10181046
+  ],
+  "views": [
+    {
+      "id": "all",
+      "title": "0 Todo el cerebro",
+      "shows": "Todas las páginas, sin filtro, con los colores por capa. Es la vista por defecto.",
+      "query": ""
+    },
+    {
+      "id": "clean-map",
+      "title": "1 Mapa limpio",
+      "shows": "El cerebro sin historia, listados generados, sistema, fuentes crudas ni principios.",
+      "query": "{not_history} -path:\"decisiones/\" -path:\"revisiones/\" -path:\"_sistema/\" -path:\"fuentes/\" -[tipo:principio] -file:\"-indice\" -path:/^[^\\/]+$/"
+    },
+    {
+      "id": "core",
+      "title": "2 Núcleo compartido",
+      "shows": "El conocimiento, sin el detalle de los principios.",
+      "query": "path:\"conocimiento/\" -[tipo:principio]"
+    },
+    {
+      "id": "project",
+      "title": "3 Un proyecto y el núcleo",
+      "shows": "Una vista por cada proyecto de config.json (menos los aparcados): sus páginas vivas junto al núcleo resumido. La consulta sale de project_view.",
+      "query": ""
+    },
+    {
+      "id": "history",
+      "title": "4 Solo historia",
+      "shows": "Bitácoras, decisiones, revisiones y buzones, colgados de la portada de su proyecto.",
+      "query": "{history} OR path:\"decisiones/\" OR path:\"revisiones/\" OR [tipo:proyecto]"
+    }
+  ],
+  "project_view": "(path:\"proyectos/<project-folder>/\" OR path:\"conocimiento/\") -path:\"fuentes/\" -[tipo:principio] {not_history} -file:\"-indice\""
+}

@@ -1,10 +1,10 @@
 ---
 tipo: marketing
-proyecto: 
-actualizado: 
+proyecto: {{proyecto}}
+actualizado: {{fecha}}
 ---
 
-# Marketing de {{proyecto}}
+# Marketing de {{nombre}}
 
 ## Qué vendemos
 Producto, formato y precio. Qué recibe el cliente.

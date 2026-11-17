@@ -1,6 +1,6 @@
 ---
 tipo: decision
-proyecto: 
+proyecto: {{proyecto}}
 fecha: 
 estado: vigente
 reemplaza: 

@@ -22,7 +22,7 @@ No. Graphify agrega una línea a `~/.claude/CLAUDE.md`, y la sincronización del
 ## Sobre la estructura
 
 **¿Un cerebro global para toda la empresa o uno por proyecto?**
-Uno solo para todo, con una carpeta por proyecto. Así los proyectos se pueden enlazar entre sí, ves todas las decisiones en una tabla y hay un solo repo que respaldar. Si algún día un proyecto tiene socios, su carpeta se separa sin romper nada.
+Uno solo para todo, con una carpeta por proyecto. Así los proyectos comparten un núcleo de conocimiento (no se enlazan entre sí: ver [el método](el-metodo.md)), ves todas las decisiones en una tabla y hay un solo repo que respaldar. Si algún día un proyecto tiene socios, su carpeta se separa sin romper nada.
 
 **Pero si uso un cerebro global, ¿no tengo que abrir todos los chats desde ahí?**
 No. Las reglas globales se cargan en todas las sesiones, abras donde abras. Abres el chat en tu proyecto y la IA igual sabe dónde está el cerebro.

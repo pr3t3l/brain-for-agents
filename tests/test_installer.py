@@ -57,7 +57,8 @@ def check_template(name, system):
         "Codex writable root": str(brain) in codex["sandbox_workspace_write"]["writable_roots"],
         "Codex keeps old content": codex["windows"]["sandbox"] == "elevated",
         "git repo": (brain / ".git").exists(),
-        "post-commit hook": (brain / ".git" / "hooks" / "post-commit").exists(),
+        "hooks path points at the brain's own hooks": run(["git", "-C", str(brain), "config", "--get", "core.hooksPath"]).stdout.strip() == f"{system}/hooks",
+        "pre-commit and post-commit exist": all((brain / system / "hooks" / h).exists() for h in ("pre-commit", "post-commit")),
     })
     run(install)
     s2 = json.loads((home / ".claude" / "settings.json").read_text(encoding="utf-8"))
@@ -72,6 +73,7 @@ def check_template(name, system):
     g.write_text(g.read_text(encoding="utf-8") + "\n- new test rule\n", encoding="utf-8")
     run(["git", "-C", str(brain), "add", "-A"])
     run(["git", "-C", str(brain), "-c", "user.name=test", "-c", "user.email=test@example.com", "commit", "-q", "-m", "test"])
+    checks["commit of a healthy brain goes in (pre-commit check passes)"] = run(["git", "-C", str(brain), "log", "--oneline"]).stdout.strip() != ""
     checks["commit syncs the global rules"] = "new test rule" in (home / ".codex" / "AGENTS.md").read_text(encoding="utf-8")
     after = claude_md.read_text(encoding="utf-8")
     checks["sync keeps lines other tools add (Graphify)"] = "new test rule" in after and "graphify: use /graphify" in after and after.count("brain:global-copy") == 1
@@ -83,6 +85,9 @@ def check_template(name, system):
     checks["installed guardian blocks another project"] = b'"deny"' in r.stdout
     guards = run([sys.executable, "-I", str(brain / system / "scripts" / "test_guards.py")])
     checks["guard tests pass"] = guards.returncode == 0
+    brain_tests = run([sys.executable, "-I", str(brain / system / "scripts" / "test_brain.py")])
+    checks["brain tests pass (connector, check, new project, views, hooks, autosave)"] = brain_tests.returncode == 0 and "ALL GOOD" in brain_tests.stdout
+    checks["check of the installed brain has 0 failures"] = run([sys.executable, "-I", str(brain / system / "scripts" / "check.py"), str(brain)]).returncode == 0
     shutil.rmtree(root, ignore_errors=True)
     return checks
 
@@ -93,6 +98,11 @@ es_scripts = {p.name: p.read_bytes() for p in (REPO / "plantilla" / "_sistema" /
 same = en_scripts == es_scripts
 ok &= same
 print(("OK " if same else "BAD"), "both templates ship identical scripts")
+en_hooks = {p.name: p.read_bytes() for p in (REPO / "template" / "_system" / "hooks").glob("*")}
+es_hooks = {p.name: p.read_bytes() for p in (REPO / "plantilla" / "_sistema" / "hooks").glob("*")}
+same_hooks = en_hooks == es_hooks and bool(en_hooks) and all(b"\r" not in v for v in en_hooks.values())
+ok &= same_hooks
+print(("OK " if same_hooks else "BAD"), "both templates ship identical hooks, with LF line endings")
 for name, system in TEMPLATES.items():
     print(f"== {name} ==")
     for check, passed in check_template(name, system).items():

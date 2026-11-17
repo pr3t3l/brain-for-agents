@@ -1,3 +1,7 @@
+---
+tipo: bitacora
+---
+
 # Bitácora del cerebro
 
 Solo se agrega al final. Formato: `## [AAAA-MM-DD] tipo | título`.

@@ -1,6 +1,6 @@
 ---
 type: decision
-project: 
+project: {{project}}
 date: 
 status: current
 replaces: 

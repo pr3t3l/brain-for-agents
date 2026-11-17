@@ -1,8 +1,7 @@
 {
+  "note": "The single list of projects, page types, zones, bridges and limits. connect.py, check.py, new_project.py and apply_views.py read it; to add a project use new_project.py (or add it here): no program needs editing. Words that depend on the language (folder names, header keys) live in layout.",
   "language": "en",
-  "project_folders": [
-    "C:/Users/YOUR-USER/Projects"
-  ],
+  "project_folders": ["C:/Users/YOUR-USER/Projects"],
   "company_folders": [],
   "layout": {
     "projects": "projects",
@@ -10,6 +9,128 @@
     "inbox": "inbox.md",
     "decisions": "decisions",
     "decision_tag": "type: decision",
-    "unconfirmed": "to confirm"
+    "unconfirmed": "to confirm",
+    "type_key": "type",
+    "project_key": "project",
+    "status_key": "status",
+    "replaces_key": "replaces",
+    "status_current": "current",
+    "status_replaced": "replaced"
+  },
+  "projects": {
+    "shop": {"name": "Shop", "marketing": true, "parked": false}
+  },
+  "project_pages": {
+    "note": "Minimum pages of a project and the template (in _system/templates) new_project.py builds each from. A parked project (an idea) is not required to have them.",
+    "templates": "templates",
+    "always": [
+      {"file": "{p}.md", "template": "project"},
+      {"file": "{p}-status.md", "template": "status", "role": "status"},
+      {"file": "{p}-log.md", "template": "project-log"},
+      {"file": "inbox.md", "template": "project-inbox"}
+    ],
+    "if_marketing": [
+      {"file": "{p}-marketing.md", "template": "marketing"},
+      {"file": "{p}-learnings.md", "template": "project-learnings"},
+      {"file": "{p}-sources.md", "template": "project-sources"}
+    ],
+    "folders": ["decisions"]
+  },
+  "new_project": {
+    "tokens": {"project": "{{project}}", "name": "{{name}}", "date": "{{date}}"},
+    "index_row": "| {name} | {{what it is}} | [[projects/{p}/{p}\\|{name}]] | [[projects/{p}/{p}-marketing\\|marketing]] |"
+  },
+  "types": {
+    "note": "history: pages that record what happened (not what is true today); they are never drawn as links. no_blocks: pages no program writes into.",
+    "valid": [
+      "index",
+      "guide",
+      "project",
+      "status",
+      "marketing",
+      "learnings",
+      "sources",
+      "log",
+      "inbox",
+      "pending",
+      "review",
+      "proposal",
+      "decision",
+      "channel",
+      "principle",
+      "rules",
+      "template",
+      "routes"
+    ],
+    "history": ["log", "inbox", "pending", "review", "proposal"],
+    "no_blocks": ["log", "inbox", "pending", "decision", "review", "proposal"]
+  },
+  "zones": [
+    {"path": "projects/", "layer": "island"},
+    {"path": "knowledge/", "layer": "core"},
+    {"path": "company/", "layer": "company"},
+    {"path": "sources/", "layer": "sources"},
+    {"path": "reviews/", "layer": "history"},
+    {"path": "_system/", "layer": "system"}
+  ],
+  "root_pages": {
+    "AGENTS": "door",
+    "index": "door",
+    "task-routes": "door",
+    "CLAUDE": "system",
+    "log": "history"
+  },
+  "raw": ["sources/"],
+  "listing_suffix": "-index",
+  "parts": {
+    "note": "Each folder of a project is a part with one center page that gathers its pages; the project cover links every center. The center is: 1) centers (fixed); 2) a page at the root of the folder called one of names; 3) the only page there whose type is center_type. If none, connect.py writes generated_name (next to the folder, at the root of the project, for the folders in outside_folder).",
+    "centers": {},
+    "names": ["{p}-{folder}", "{folder}-{p}", "{folder}", "README"],
+    "center_type": "index",
+    "generated_name": "{p}-{folder}",
+    "suffix_if_clash": "-part",
+    "outside_folder": ["decisions"]
+  },
+  "bridges": [
+    {"page": "task-routes", "text": "task routes"},
+    {"page": "knowledge/knowledge", "text": "shared knowledge"},
+    {"page": "company/pending", "text": "what waits for the owner"},
+    {"page": "projects/{p}/inbox", "text": "{name} inbox"}
+  ],
+  "cited": {
+    "note": "What a project cover shows it cites from the core (groups), and the core pages that get a 'Where it applies' block (applied_in). Principles are never listed on a cover: that would be one link per principle.",
+    "groups": [
+      {"id": "channels", "title": "Channels", "path": "knowledge/channels/"}
+    ],
+    "applied_in": ["knowledge/channels/", "knowledge/principles/"]
+  },
+  "limits": {
+    "max_links_hand": 60,
+    "max_cite_decision": 20,
+    "applied_max": 10,
+    "status_kb": 6,
+    "status_lines": 60,
+    "log_kb": 100,
+    "hops": 2,
+    "same_link_share": 0.8,
+    "same_link_min_pages": 5
+  },
+  "checks": {
+    "note": "What check.py uses. frozen: links that already broke a rule on the day the rule was adopted; the check fails only for a NEW one, and warns when one is no longer needed.",
+    "routes": "task-routes",
+    "key_pages": ["task-routes", "knowledge/knowledge", "company/pending"],
+    "required_reads": {
+      "AGENTS.md": ["task-routes"],
+      "_system/global.md": ["task-routes"]
+    },
+    "example_links": [],
+    "always_linkable": ["company/pending"],
+    "index_page": "index",
+    "frozen": {
+      "island_to_island": [],
+      "core_to_island": [],
+      "core_to_history": [],
+      "core_to_company": []
+    }
   }
 }

@@ -1,0 +1,91 @@
+{
+  "note": "Reference for the views of the Obsidian graph. The truth lives here and in the list of projects in _system/config.json; .obsidian/graph.json and .obsidian/bookmarks.json are brought up to date from this file with _system/scripts/apply_views.py (colors, default filter and one bookmark per view), only with Obsidian closed. A new project gets its color and its view by itself. In a query, {history} stands for every history type of config.json and {not_history} for the same, negated. This file holds folder names: it is the one place that differs per language.",
+  "bookmark_group": "Brain views",
+  "switches": {
+    "showTags": false,
+    "showAttachments": false,
+    "hideUnresolved": true,
+    "showOrphans": false
+  },
+  "layer_colors": [
+    {
+      "name": "History",
+      "query": "{history} OR path:\"decisions/\" OR path:\"reviews/\"",
+      "rgb": 9080728,
+      "hex": "8A8F98",
+      "paints": "logs, inboxes, pending, decisions and reviews: what happened"
+    },
+    {
+      "name": "System and listings",
+      "query": "path:\"_system/\" OR path:/^[^\\/]+$/ OR path:/-index(\\.md)?$/",
+      "rgb": 6054768,
+      "hex": "5C6370",
+      "paints": "rules, templates, root pages and generated listings"
+    },
+    {
+      "name": "Sources",
+      "query": "path:\"sources/\"",
+      "rgb": 8350293,
+      "hex": "7F6A55",
+      "paints": "raw documents"
+    },
+    {
+      "name": "Knowledge",
+      "query": "path:\"knowledge/\"",
+      "rgb": 3381759,
+      "hex": "3399FF",
+      "paints": "the shared core"
+    },
+    {
+      "name": "Company",
+      "query": "path:\"company/\"",
+      "rgb": 10181046,
+      "hex": "9B59B6",
+      "paints": "what cuts across projects"
+    }
+  ],
+  "project_colors": {
+    "shop": 15105570
+  },
+  "spare_colors": [
+    3447003,
+    3066993,
+    16734827,
+    1752220,
+    15844367,
+    10181046
+  ],
+  "views": [
+    {
+      "id": "all",
+      "title": "0 Whole brain",
+      "shows": "Every page, no filter, colored by layer. The default view.",
+      "query": ""
+    },
+    {
+      "id": "clean-map",
+      "title": "1 Clean map",
+      "shows": "The brain without history, generated listings, system, raw sources or principles.",
+      "query": "{not_history} -path:\"decisions/\" -path:\"reviews/\" -path:\"_system/\" -path:\"sources/\" -[type:principle] -file:\"-index\" -path:/^[^\\/]+$/"
+    },
+    {
+      "id": "core",
+      "title": "2 Shared core",
+      "shows": "The knowledge, without the detail of principles.",
+      "query": "path:\"knowledge/\" -[type:principle]"
+    },
+    {
+      "id": "project",
+      "title": "3 One project and the core",
+      "shows": "One view per project of config.json (parked ones aside): its live pages next to the summarized core. The query comes from project_view.",
+      "query": ""
+    },
+    {
+      "id": "history",
+      "title": "4 History only",
+      "shows": "Logs, decisions, reviews and inboxes, hanging from the cover of their project.",
+      "query": "{history} OR path:\"decisions/\" OR path:\"reviews/\" OR [type:project]"
+    }
+  ],
+  "project_view": "(path:\"projects/<project-folder>/\" OR path:\"knowledge/\") -path:\"sources/\" -[type:principle] {not_history} -file:\"-index\""
+}
